@@ -59,9 +59,17 @@ class NovelController extends Controller
         $next = $htmlObj->find('div[class=bottem2] a', -1);
         $title = $htmlObj->find('div[class=bookname] h1', 0);
         $result = [];
-        $result['article']['title'] = $title->plaintext;
+
+        $temp = [];
+        $temp['text'] = $title->plaintext;
+        $temp['type'] = "title";
+        $result['article'][] = $temp;
+
         foreach ($content as $ele) {
-            $result['article']['content'][] = $ele->plaintext;
+            $temp = [];
+            $temp['text'] = $ele->plaintext;
+            $temp['type'] = "content";
+            $result['article'][] = $temp;
         }
         $result['preview'] = "http://www.31xs.com/" . $preview->href;
         $result['next'] = "http://www.31xs.com/" . $next->href;
