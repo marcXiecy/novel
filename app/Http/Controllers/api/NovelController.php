@@ -24,6 +24,9 @@ class NovelController extends Controller
             $temp['href'] = $ele->find('a', 0)->href;
             $result[] = $temp;
         }
+        if (!$result) {
+            return $this->apiOut($result, 0, '无结果');
+        }
         return $this->apiOut($result);
     }
 
