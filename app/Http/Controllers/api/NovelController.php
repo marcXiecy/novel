@@ -53,12 +53,15 @@ class NovelController extends Controller
         $article = app()->make('CommonService')->curl($article_url);
         $htmlObj = new simple_html_dom();	//工具类对象初始化
         $htmlObj->load($article);
+     
         $content = $htmlObj->find('div[id=content] p');
         $preview = $htmlObj->find('div[class=bottem2] a', 0);
         $next = $htmlObj->find('div[class=bottem2] a', -1);
+        $title = $htmlObj->find('div[class=bookname] h1', 0);
         $result = [];
+        $result['article']['title'] = $title->plaintext;
         foreach ($content as $ele) {
-            $result['content'][] = $ele->plaintext;
+            $result['article']['content'][] = $ele->plaintext;
         }
         $result['preview'] = "http://www.31xs.com/" . $preview->href;
         $result['next'] = "http://www.31xs.com/" . $next->href;
