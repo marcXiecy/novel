@@ -60,8 +60,8 @@ class NovelController extends Controller
         foreach ($content as $ele) {
             $result['content'][] = $ele->plaintext;
         }
-        $result['preview'][] = "http://www.31xs.com/" . $preview->href;
-        $result['next'][] = "http://www.31xs.com/" . $next->href;
+        $result['preview'] = "http://www.31xs.com/" . $preview->href;
+        $result['next'] = "http://www.31xs.com/" . $next->href;
         return $this->apiOut($result);
     }
 }
