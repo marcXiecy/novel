@@ -10,4 +10,12 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    public function apiOut($data = '', $flag = 1, $msg = 'success')
+    {
+        return [
+            'data' => $data,
+            'flag' => $flag,
+            'msg' => $msg,
+        ];
+    }
 }

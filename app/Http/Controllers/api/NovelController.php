@@ -6,6 +6,7 @@ use App\Functions\simple_html_dom;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+// 小程序代码上传密钥 wx563fec61a0a7f915
 class NovelController extends Controller
 {
     public function search(Request $request)
@@ -22,7 +23,7 @@ class NovelController extends Controller
             $temp['href'] = $ele->find('a', 0)->href;
             $result[] = $temp;
         }
-        return $result;
+        return $this->apiOut($result);
     }
 
     public function catalog(Request $request)
@@ -39,7 +40,7 @@ class NovelController extends Controller
             $temp['href'] = "http://www.31xs.com/" . $ele->href;
             $result[] = $temp;
         }
-        return $result;
+        return $this->apiOut($result);
     }
 
     public function article(Request $request)
@@ -57,6 +58,6 @@ class NovelController extends Controller
         }
         $result['preview'][] = "http://www.31xs.com/" . $preview->href;
         $result['next'][] = "http://www.31xs.com/" . $next->href;
-        return $result;
+        return $this->apiOut($result);
     }
 }
