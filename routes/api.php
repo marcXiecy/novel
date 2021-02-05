@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\NovelController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +17,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+
+Route::prefix('/novel')->group(function () {
+    Route::get('/search', [NovelController::class,'search']);
+    Route::get('/catalog', [NovelController::class,'catalog']);
+    Route::get('/article', [NovelController::class,'article']);
 });
