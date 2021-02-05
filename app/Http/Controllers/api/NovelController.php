@@ -11,7 +11,7 @@ class NovelController extends Controller
 {
     public function search(Request $request)
     {
-        $keyword = $this->input('keyword');
+        $keyword = $request->input('keyword');
         $books = app()->make('CommonService')->curl('http://www.31xs.com/search.php', ['keyword'=>$keyword], true);
 
         $htmlObj = new simple_html_dom();	//工具类对象初始化
