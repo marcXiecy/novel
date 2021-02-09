@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\NovelController;
+use App\Http\Controllers\api\WxUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,4 +25,16 @@ Route::prefix('/novel')->group(function () {
     Route::get('/search', [NovelController::class,'search']);
     Route::get('/catalog', [NovelController::class,'catalog']);
     Route::get('/article', [NovelController::class,'article']);
+    Route::get('/shelf', [NovelController::class,'shelf']);
+    Route::any('/shelf/add', [NovelController::class,'addBookToShelf']);
+    Route::any('/shelf/remove', [NovelController::class,'removeBookFromShelf']);
+    Route::any('/shelf/check', [NovelController::class,'checkBookInShelf']);
+});
+
+Route::prefix('/wxusers')->group(function () {
+    Route::get('/code2session/{code}', [WxUserController::class,'Code2Session']);
+    Route::get('/autoRegister', [WxUserController::class,'registerByOpenId']);
+    Route::get('/getCurrentUser', [WxUserController::class,'getCurrentUser']);
+    Route::post('/updateUser', [WxUserController::class,'updateUser']);
+    Route::post('/updateUserPhone', [WxUserController::class,'updateUserPhone']);
 });
