@@ -108,7 +108,17 @@ class NovelController extends Controller
         return $this->apiOut($result);
     }
 
-
+    public function book_info(Request $request)
+    {
+        $author = $request->input('author');
+        $title = $request->input('title');
+        $book = bookmill::where(['title'=>$title,'author'=>$author])->first();
+        if ($book) {
+            return $this->apiOut($book);
+        } else {
+            return $this->apiOut('', 0);
+        }
+    }
     
     public function shelf(Request $request)
     {

@@ -25,6 +25,7 @@ Route::prefix('/novel')->group(function () {
     Route::get('/search', [NovelController::class,'search']);
     Route::get('/catalog', [NovelController::class,'catalog']);
     Route::get('/article', [NovelController::class,'article']);
+    Route::get('/book_info', [NovelController::class,'book_info']);
     Route::get('/shelf', [NovelController::class,'shelf']);
     Route::any('/shelf/add', [NovelController::class,'addBookToShelf']);
     Route::any('/shelf/remove', [NovelController::class,'removeBookFromShelf']);
