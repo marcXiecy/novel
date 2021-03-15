@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\shelf;
 use App\Models\wxUser;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -78,6 +79,14 @@ class WxUserController extends Controller
         }
     }
 
+    public function getCurrentUser(){
+        $openId = Session::get('wxSession')['openId'];
+        $currentUser = wxUser::where('wx_mini_openid', $openId)->first();
+        if($currentUser){
+            $currentUser->book_num = shelf::where('user_id',$currentUser->id)->count();
+        }
+        return $this->apiOut($currentUser);
+    }
     public function updateUser(Request $request): array
     {
         $openId =  Session::get('wxSession')['openId'];

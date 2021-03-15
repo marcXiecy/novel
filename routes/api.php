@@ -33,9 +33,9 @@ Route::prefix('/novel')->group(function () {
 });
 
 Route::prefix('/wxusers')->group(function () {
-    Route::get('/code2session/{code}', [WxUserController::class,'Code2Session']);
-    Route::get('/autoRegister', [WxUserController::class,'registerByOpenId']);
-    Route::get('/getCurrentUser', [WxUserController::class,'getCurrentUser']);
-    Route::post('/updateUser', [WxUserController::class,'updateUser']);
-    Route::post('/updateUserPhone', [WxUserController::class,'updateUserPhone']);
+    Route::any('/code2session/{code}', [WxUserController::class,'Code2Session']);
+    Route::any('/autoRegister', [WxUserController::class,'registerByOpenId']);
+    Route::any('/getCurrentUser', [WxUserController::class,'getCurrentUser']);
+    Route::any('/updateUser', [WxUserController::class,'updateUser']);
+    Route::any('/updateUserPhone', [WxUserController::class,'updateUserPhone']);
 });
