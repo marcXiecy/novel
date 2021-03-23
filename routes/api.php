@@ -43,6 +43,7 @@ Route::prefix('/novel/biquge/')->group(function () {
     Route::any('/shelf/add', [NovelBiqugeController::class,'addBookToShelf']);
     Route::any('/shelf/remove', [NovelBiqugeController::class,'removeBookFromShelf']);
     Route::any('/shelf/check', [NovelBiqugeController::class,'checkBookInShelf']);
+    Route::any('/saveCatalog', [NovelBiqugeController::class,'saveCatalog']);
 });
 
 Route::prefix('/wxusers')->group(function () {
