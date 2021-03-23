@@ -104,7 +104,8 @@ class NovelBiqugeController extends Controller
 
         foreach ($content as $ele) {
             $temp = [];
-            $temp['text'] = str_replace($delete->plaintext,'',$ele->plaintext);
+            $text = str_replace($delete->plaintext,'',$ele->plaintext);
+            $temp['text'] = str_replace('&nbsp;&nbsp;&nbsp;&nbsp;','</br>',$text);
             $temp['type'] = "content";
             $result['article'][] = $temp;
         }
