@@ -37,6 +37,7 @@ Route::prefix('/novel')->group(function () {
 Route::prefix('/novel/biquge/')->group(function () {
     Route::get('/search', [NovelBiqugeController::class,'search']);
     Route::get('/catalog', [NovelBiqugeController::class,'catalog']);
+    Route::get('/saveCatalog', [NovelBiqugeController::class,'saveCatalog']);
     Route::get('/article', [NovelBiqugeController::class,'article']);
     Route::get('/book_info', [NovelBiqugeController::class,'book_info']);
     Route::get('/shelf', [NovelBiqugeController::class,'shelf']);

@@ -9,7 +9,6 @@ use App\Models\NovelDetail;
 use App\Models\shelf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use PDO;
 
 // 小程序代码上传密钥 wx563fec61a0a7f915
 class NovelBiqugeController extends Controller
@@ -42,8 +41,12 @@ class NovelBiqugeController extends Controller
     public function catalog(Request $request)
     {
         $catalog_url = $request->input('catalog_url');
+        $book_id = $request->input('book_id');
+        if(!$catalog_url){
+            $book = bookmill::where(['id' => $book_id])->first();
+            $catalog_url = $book->url;
+        }
         $catalog = app()->make('CommonService')->curl($catalog_url, 0, 0, 0, 1);
-
         $htmlObj = new simple_html_dom();    //工具类对象初始化
         $htmlObj->load($catalog);
         $title = $htmlObj->find('div[id=info] h1', 0);
@@ -55,7 +58,7 @@ class NovelBiqugeController extends Controller
         $list = $htmlObj->find('div[id=list] a');
         $image = $htmlObj->find('div[id=fmimg] img', 0);
         $image = $image->src;
-        $this->addBookToMill($title, $author, $catalog_url, $image);
+        $book_id = $this->addBookToMill($title, $author, $catalog_url, $image);
         $result = [];
         $result['title'] = $title;
         $result['author'] = $author;
@@ -66,7 +69,7 @@ class NovelBiqugeController extends Controller
             $temp['href'] = $this->siteUrl . $ele->href;
             $result['catalog'][] = $temp;
         }
-        return $this->apiOut($result);
+        return $this->apiOut($result,1,'',$book_id);
     }
 
     public function article(Request $request)
@@ -151,18 +154,18 @@ class NovelBiqugeController extends Controller
         $book = bookmill::where(['title' => $title, 'author' => $author])->first();
         if ($book) {
             $result = bookmill::where('id', $book->id)->update($condition);
+            $book_id = $book->id;
         } else {
             $result = bookmill::create($condition);
+            $book_id = $result['id'];
         }
-        return $result;
+        return $book_id;
     }
 
     public function addBookToShelf(Request $request)
     {
-        $url = $request->input('url');
-        $author = $request->input('author');
-        $title = $request->input('title');
-        $book = bookmill::where('title', $title)->where('author', $author)->first();
+        $book_id = $request->input('book_id');
+        $book = bookmill::where('id', $book_id)->first();
         if (!$book) {
             return $this->apiOut('', 0);
         }
@@ -174,7 +177,7 @@ class NovelBiqugeController extends Controller
         if ($shelf) {
             return $this->apiOut('', 0);
         }
-        $r = shelf::create(['user_id' => $user->id, 'book_id' => $book->id, 'url' => $url]);
+        $r = shelf::create(['user_id' => $user->id, 'book_id' => $book->id, 'url' => $book->url]);
         return $this->apiOut($r, $r ? 1 : 0);
     }
 
@@ -209,6 +212,7 @@ class NovelBiqugeController extends Controller
     public function saveCatalog(Request $request)
     {
         $catalog_url = self::novel_hrefs[0];
+        $catalog_url = $request->input('url');
         $catalog = app()->make('CommonService')->curl($catalog_url, 0, 0, 0, 1);
         $htmlObj = new simple_html_dom();    //工具类对象初始化
         $htmlObj->load($catalog);
