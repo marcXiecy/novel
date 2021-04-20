@@ -58,7 +58,7 @@ class NovelBiqugeController extends Controller
         $list = $htmlObj->find('div[id=list] a');
         $image = $htmlObj->find('div[id=fmimg] img', 0);
         $image = $image->src;
-        $book_id = $this->addBookToMill($title, $author, $catalog_url, $image);
+      
         $result = [];
         $result['title'] = $title;
         $result['author'] = $author;
@@ -69,6 +69,8 @@ class NovelBiqugeController extends Controller
             $temp['href'] = $this->siteUrl . $ele->href;
             $result['catalog'][] = $temp;
         }
+        $newest = array_pop($result['catalog'])['title'];
+        $book_id = $this->addBookToMill($title, $author, $catalog_url, $image, $newest);
         return $this->apiOut($result,1,'',$book_id);
     }
 
@@ -143,13 +145,14 @@ class NovelBiqugeController extends Controller
         }
     }
 
-    private function addBookToMill($title, $author, $url, $image)
+    private function addBookToMill($title, $author, $url, $image,$newest)
     {
         $condition = [
             'title' => $title,
             'author' => $author,
             'url' => $url,
             'image' => $image,
+            'newest' => $newest,
         ];
         $book = bookmill::where(['title' => $title, 'author' => $author])->first();
         if ($book) {
