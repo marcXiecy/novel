@@ -48,6 +48,7 @@ Route::prefix('/novel/biquge/')->group(function () {
 });
 
 Route::prefix('/wxusers')->group(function () {
+    Route::any('/checkSession', [WxUserController::class,'checkSession']);
     Route::any('/code2session/{code}', [WxUserController::class,'Code2Session']);
     Route::any('/autoRegister', [WxUserController::class,'registerByOpenId']);
     Route::any('/getCurrentUser', [WxUserController::class,'getCurrentUser']);

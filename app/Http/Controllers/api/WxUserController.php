@@ -56,6 +56,22 @@ class WxUserController extends Controller
         }
     }
 
+    public function checkSession()
+    {
+        $session = Session::get('wxSession');
+        if (empty($session)) {
+            return $this->apiOut('', 0, '需要重新登陆');
+        } else {
+            $existedUser = wxUser::where('wx_mini_openid', $session['openId'])->first();
+            if (!empty($existedUser)) {
+                Session::put('wxUser', $existedUser);
+                return $this->apiOut($existedUser);
+            } else {
+                $this->registerByOpenId();
+            }
+        }
+    }
+
     public function registerByOpenId(): array
     {
         $openId = Session::get('wxSession')['openId'];
@@ -80,6 +96,10 @@ class WxUserController extends Controller
     }
 
     public function getCurrentUser(){
+        $session = Session::get('wxSession');
+        if (empty($session)) {
+            return $this->apiOut('', 0, '需要重新登陆');
+        }
         $openId = Session::get('wxSession')['openId'];
         $currentUser = wxUser::where('wx_mini_openid', $openId)->first();
         if($currentUser){
