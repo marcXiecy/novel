@@ -65,9 +65,9 @@ class NovelBiqugeController extends Controller
         $result['image'] = $image;
         foreach ($list as $ele) {
             $temp = [];
-            $title = mb_convert_encoding( $ele->plaintext, 'UTF-8', 'UTF-8,GBK,GB2312,BIG5' );
-            $temp['title'] = $title;
-            $temp['short'] = mb_substr($title,-5);
+            $c_title = mb_convert_encoding( $ele->plaintext, 'UTF-8', 'UTF-8,GBK,GB2312,BIG5' );
+            $temp['title'] = $c_title;
+            $temp['short'] = mb_substr($c_title,-5);
             $temp['href'] = $this->siteUrl . $ele->href;
             $result['catalog'][] = $temp;
         }

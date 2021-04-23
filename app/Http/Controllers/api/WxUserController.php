@@ -109,6 +109,10 @@ class WxUserController extends Controller
     }
     public function updateUser(Request $request): array
     {
+        $session = Session::get('wxSession');
+        if (empty($session)) {
+            return $this->apiOut('', 0, '需要重新登陆');
+        }
         $openId =  Session::get('wxSession')['openId'];
         if (empty($openId)) {
             return $this->outputError('需要重新登陆');
