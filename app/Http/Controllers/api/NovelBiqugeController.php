@@ -65,9 +65,7 @@ class NovelBiqugeController extends Controller
         $result['image'] = $image;
         foreach ($list as $ele) {
             $temp = [];
-            $c_title = mb_convert_encoding( $ele->plaintext, 'UTF-8', 'UTF-8,GBK,GB2312,BIG5' );
-            $temp['title'] = $c_title;
-            $temp['short'] = mb_substr($c_title,-5);
+            $temp['title'] = $ele->plaintext;
             $temp['href'] = $this->siteUrl . $ele->href;
             $result['catalog'][] = $temp;
         }
@@ -122,6 +120,8 @@ class NovelBiqugeController extends Controller
         }
         $result['preview'] = $this->siteUrl . $preview->href;
         $result['next'] = $this->siteUrl .  $next->href;
+        $detail_log = NovelDetail::where('source_href',$article_url)->first();
+        $result['c_title'] = $detail_log->title;
         return $this->apiOut($result);
     }
 

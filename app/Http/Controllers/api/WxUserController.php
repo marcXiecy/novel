@@ -48,6 +48,7 @@ class WxUserController extends Controller
 
         $currentUser = wxUser::where('wx_mini_openid', $openId)->first();
         if (!empty($currentUser)) {
+            $currentUser->book_num = shelf::where('user_id',$currentUser->id)->count();
             Session::put('wxUser', $currentUser);
             $currentUser->sessionKey = $sessionKey;
             return $this->apiOut($currentUser);
@@ -64,6 +65,7 @@ class WxUserController extends Controller
         } else {
             $existedUser = wxUser::where('wx_mini_openid', $session['openId'])->first();
             if (!empty($existedUser)) {
+                $existedUser->book_num = shelf::where('user_id',$existedUser->id)->count();
                 Session::put('wxUser', $existedUser);
                 return $this->apiOut($existedUser);
             } else {
