@@ -69,7 +69,7 @@ class NovelBiqugeController extends Controller
             $temp['href'] = $this->siteUrl . $ele->href;
             $result['catalog'][] = $temp;
         }
-        $newest = array_pop($result['catalog'])['title'];
+        $newest = end($result['catalog'])['title'];
         $book_id = $this->addBookToMill($title, $author, $catalog_url, $image, $newest);
         return $this->apiOut($result,1,'',$book_id);
     }
