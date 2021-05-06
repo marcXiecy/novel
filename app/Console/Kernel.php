@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
         // $schedule->call(function () {
         //     wxUser::where('id',1)->increment('gender');
         // })->everyMinute();
-        $schedule->call(new RefreshBook)->everyMinute();
+        $schedule->call(new RefreshBook)->everySixHours();
     }
 
     /**
