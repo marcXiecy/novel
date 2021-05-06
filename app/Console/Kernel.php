@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Models\wxUser;
+use App\Schedules\RefreshBook;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -29,6 +30,7 @@ class Kernel extends ConsoleKernel
         // $schedule->call(function () {
         //     wxUser::where('id',1)->increment('gender');
         // })->everyMinute();
+        $schedule->call(new RefreshBook)->everyMinute();
     }
 
     /**

@@ -21,7 +21,7 @@ class refreshBookEvent
      * @return void
      */
     public function __construct(shelf $shelf)
-    {
+    { 
         $this->shelf = $shelf;
     }
 
@@ -32,6 +32,6 @@ class refreshBookEvent
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('refreshbook');
+        return new PrivateChannel('refresh');
     }
 }

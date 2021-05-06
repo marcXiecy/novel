@@ -146,9 +146,10 @@ class NovelBiqugeController extends Controller
         }
         if ($user) {
             $shelf = shelf::with('book')->where('user_id', $user->id)->get();
-            $shelf->map(function(shelf $s){
-                refreshBookEvent::dispatch($s);
-            });
+            
+            // $shelf->map(function(shelf $s){
+            //     refreshBookEvent::dispatch($s);
+            // });
 
             return $this->apiOut($shelf);
         } else {

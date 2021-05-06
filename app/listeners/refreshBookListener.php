@@ -15,7 +15,7 @@ class refreshBookListener implements ShouldQueue
      *
      * @var string|null
      */
-    public $connection = 'database';
+    public $connection = 'sync';
 
     /**
      * 任务将被发送到的队列的名称
@@ -29,7 +29,7 @@ class refreshBookListener implements ShouldQueue
      *
      * @var int
      */
-    public $delay = 3;
+    public $delay = 1;
 
     /**
      * Create the event listener.
@@ -48,7 +48,7 @@ class refreshBookListener implements ShouldQueue
      * @return void
      */
     public function handle(refreshBookEvent $event)
-    {
+    {   
         $s = $event->shelf;
         $book = bookmill::where(['id' => $s->book_id])->first();
         $catalog_url = $book->url;
