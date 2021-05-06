@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Events\refreshBookEvent;
 use App\Functions\simple_html_dom;
 use App\Http\Controllers\Controller;
 use App\Models\bookmill;
@@ -145,6 +146,10 @@ class NovelBiqugeController extends Controller
         }
         if ($user) {
             $shelf = shelf::with('book')->where('user_id', $user->id)->get();
+            $shelf->map(function(shelf $s){
+                refreshBookEvent::dispatch($s);
+            });
+
             return $this->apiOut($shelf);
         } else {
             return $this->apiOut('', 0, '失败');
