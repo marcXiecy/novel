@@ -78,6 +78,10 @@ class NovelBiqugeController extends Controller
     public function article(Request $request)
     {
         $article_url = $request->input('article_url');
+        
+        if(substr($article_url,-4) != 'html'){
+            return $this->apiOut('',0,'已到最新');
+        }
         $title = $request->input('title');
         $author = $request->input('author');
         $book = bookmill::where(['title' => $title, 'author' => $author])->first();
@@ -121,8 +125,9 @@ class NovelBiqugeController extends Controller
         }
         $result['preview'] = $this->siteUrl . $preview->href;
         $result['next'] = $this->siteUrl .  $next->href;
-        $detail_log = NovelDetail::where('source_href',$article_url)->first();
-        $result['c_title'] = $detail_log->title;
+        // $detail_log = NovelDetail::where('source_href',$article_url)->first();
+        // $result['c_title'] = $detail_log->title;
+        $result['c_title'] = $result['title'];
         return $this->apiOut($result);
     }
 
