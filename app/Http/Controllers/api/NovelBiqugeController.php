@@ -125,9 +125,9 @@ class NovelBiqugeController extends Controller
         }
         $result['preview'] = $this->siteUrl . $preview->href;
         $result['next'] = $this->siteUrl .  $next->href;
-        // $detail_log = NovelDetail::where('source_href',$article_url)->first();
-        // $result['c_title'] = $detail_log->title;
-        $result['c_title'] = $result['title'];
+        //详情页title和目录页title有时候不一样，需要返回目录页title进行定位
+        $detail_log = NovelDetail::where('source_href',$article_url)->first();
+        $result['c_title'] = $detail_log->title;
         return $this->apiOut($result);
     }
 
