@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Session;
 // 小程序代码上传密钥 wx563fec61a0a7f915
 class NovelBiqugeController extends Controller
 {
-    private $siteUrl = "http://www.xbiquge.la/";
+    private $siteUrl = "https://www.xbiquge.la/";
     public function search(Request $request)
     {
         $keyword = $request->input('keyword');
@@ -127,7 +127,9 @@ class NovelBiqugeController extends Controller
         $result['next'] = $this->siteUrl .  $next->href;
         //详情页title和目录页title有时候不一样，需要返回目录页title进行定位
         $detail_log = NovelDetail::where('source_href',$article_url)->first();
-        $result['c_title'] = $detail_log->title;
+        if($detail_log){
+            $result['c_title'] = $detail_log->title;
+        }
         return $this->apiOut($result);
     }
 
