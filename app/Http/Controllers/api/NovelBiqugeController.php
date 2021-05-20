@@ -152,7 +152,7 @@ class NovelBiqugeController extends Controller
             return $this->apiOut('', 0, '需要重新登陆');
         }
         if ($user) {
-            $shelf = shelf::with('book')->where('user_id', $user->id)->get();
+            $shelf = shelf::with('book')->where('user_id', $user->id)->orderBy('updated_at','DESC')->get();
             
             // $shelf->map(function(shelf $s){
             //     refreshBookEvent::dispatch($s);
