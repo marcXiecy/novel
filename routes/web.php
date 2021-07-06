@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RedisController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::prefix('/redis')->group(function () {
+    Route::get('/index', [RedisController::class,'index']);
+    Route::get('/index2', [RedisController::class,'index2']);
 });
