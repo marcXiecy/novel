@@ -23,7 +23,6 @@ class CommonService
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36');
-        // curl_setopt($ch, CURLOPT_COOKIE, '_abcde_qweasd=0; BAIDU_SSP_lcr=https://www.baidu.com/link?url=IzYDuQ9mfyVUeuT4WfNk0zQtSiJNL5KvKLknC4pkWwNIRZ3nIrtTBT-U4YTp6_9jjxwqL0cjnBMHford0FjLwK&wd=&eqid=acda779a000461ff000000056059db65; _abcde_qweasd=0; Hm_lvt_169609146ffe5972484b0957bd1b46d6=1616501609; bdshare_firstime=1616501609381; Hm_lpvt_169609146ffe5972484b0957bd1b46d6=1616502430');
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

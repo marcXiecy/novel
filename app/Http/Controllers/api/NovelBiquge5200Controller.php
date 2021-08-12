@@ -12,16 +12,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 // 小程序代码上传密钥 wx563fec61a0a7f915
-class NovelBiqugeController extends Controller
+class NovelBiquge5200Controller extends Controller
 {
-    private $siteUrl = "https://www.xbiquge.la/";
-    private $source = 'xbiquge'; 
+    private $siteUrl = "http://www.b520.cc/";
+    private $source = 'xbiquge5200'; 
     public function search(Request $request)
     {
         $keyword = $request->input('keyword');
-        $books = app()->make('CommonService')->curl($this->siteUrl . 'modules/article/waps.php', ['searchkey' => $keyword], true);
+        $books = app()->make('CommonService')->curl($this->siteUrl . 'modules/article/search.php', ['searchkey' => $keyword], false);
         $htmlObj = new simple_html_dom();    //工具类对象初始化
         $htmlObj->load($books);
+
         $tr = $htmlObj->find('.grid tr');
         $result = [];
         foreach ($tr as $k => $ele) {
@@ -30,8 +31,8 @@ class NovelBiqugeController extends Controller
             }
             $temp = [];
 
-            $temp['title'] = $ele->find('.even a', 0)->plaintext;
-            $temp['href'] = $ele->find('.even a', 0)->href;
+            $temp['title'] = $ele->find('.odd a', 0)->plaintext;
+            $temp['href'] = $ele->find('.odd a', 0)->href;
             $result[] = $temp;
         }
         if (!$result) {
@@ -45,7 +46,7 @@ class NovelBiqugeController extends Controller
         $catalog_url = $request->input('catalog_url');
         $book_id = $request->input('book_id');
         if($book_id && !$catalog_url){
-            $book = bookmill::where('source',$this->source)->where(['id' => $book_id])->first();
+            $book = bookmill::where(['id' => $book_id])->where('source',$this->source)->first();
             $catalog_url = $book->url;
         }
         $catalog = app()->make('CommonService')->curl($catalog_url, 0, 0, 0, 1);
@@ -68,7 +69,7 @@ class NovelBiqugeController extends Controller
         foreach ($list as $ele) {
             $temp = [];
             $temp['title'] = $ele->plaintext;
-            $temp['href'] = $this->siteUrl . $ele->href;
+            $temp['href'] =  $ele->href;
             $result['catalog'][] = $temp;
         }
         $newest = end($result['catalog'])['title'];
@@ -85,14 +86,14 @@ class NovelBiqugeController extends Controller
         }
         $title = $request->input('title');
         $author = $request->input('author');
-        $book = bookmill::where('source',$this->source)->where(['title' => $title, 'author' => $author])->first();
+        $book = bookmill::where(['title' => $title, 'author' => $author])->where('source',$this->source)->first();
 
         if ($book) {
             $user = Session::get('wxUser');
             if ($user) {
-                $shelf = shelf::where('source',$this->source)->where('book_id', $book->id)->where('source',$this->source)->where('user_id', $user->id)->first();
+                $shelf = shelf::where('book_id', $book->id)->where('user_id', $user->id)->where('source',$this->source)->first();
                 if ($shelf) {
-                    $shelf = shelf::where('source',$this->source)->where('book_id', $book->id)->where('source',$this->source)->where('user_id', $user->id)->update(['current_page_url' => $article_url]);
+                    $shelf = shelf::where('book_id', $book->id)->where('user_id', $user->id)->where('source',$this->source)->update(['current_page_url' => $article_url]);
                 }
             }
         }
@@ -101,9 +102,9 @@ class NovelBiqugeController extends Controller
         $htmlObj->load($article);
         $bookname = $htmlObj->find('div[class=con_top] a', 1);
         $bookname = $bookname->plaintext;
-        $delete = $htmlObj->find('div[id=content] p', 0);
 
-        $content = $htmlObj->find('div[id=content]');
+
+        $content = $htmlObj->find('div[id=content] p');
         $preview = $htmlObj->find('div[class=bottem2] a', 1);
         $next = $htmlObj->find('div[class=bottem2] a', 3);
         $title = $htmlObj->find('div[class=bookname] h1', 0);
@@ -115,19 +116,17 @@ class NovelBiqugeController extends Controller
         $result['article'][] = $temp;
         $result['title'] = $title->plaintext;
 
-        $texts = str_replace($delete->plaintext, '', $content[0]->plaintext);
-        $texts = str_replace('&nbsp;&nbsp;&nbsp;&nbsp;', '|||', $texts);
-        $texts = explode('|||', $texts);
-        foreach ($texts as $ele) {
+
+        foreach ($content as $ele) {
             $temp = [];
-            $temp['text'] = $ele;
+            $temp['text'] = $ele->plaintext;
             $temp['type'] = "content";
             $result['article'][] = $temp;
         }
-        $result['preview'] = $this->siteUrl . $preview->href;
-        $result['next'] = $this->siteUrl .  $next->href;
+        $result['preview'] = $preview->href;
+        $result['next'] = $next->href;
         //详情页title和目录页title有时候不一样，需要返回目录页title进行定位
-        $detail_log = NovelDetail::where('source',$this->source)->where('source_href',$article_url)->first();
+        $detail_log = NovelDetail::where('source_href',$article_url)->where('source',$this->source)->first();
         if($detail_log){
             $result['c_title'] = $detail_log->title;
         }
@@ -170,8 +169,6 @@ class NovelBiqugeController extends Controller
     }
 
 
-
-
     // const novel_hrefs = ['http://www.xbiquge.la/10/10489/'];
 
     public function saveCatalog(Request $request)
@@ -179,7 +176,7 @@ class NovelBiqugeController extends Controller
         $catalog_url = $request->input('catalog_url');
         $book_id = $request->input('book_id');
         if($book_id && !$catalog_url){
-            $book = bookmill::where('source',$this->source)->where(['id' => $book_id])->first();
+            $book = bookmill::where(['id' => $book_id])->where('source',$this->source)->first();
             $catalog_url = $book->url;
         }
         $catalog = app()->make('CommonService')->curl($catalog_url, 0, 0, 0, 1);
@@ -194,7 +191,7 @@ class NovelBiqugeController extends Controller
         $list = $htmlObj->find('div[id=list] a');
         $image = $htmlObj->find('div[id=fmimg] img', 0);
         $image = $image->src;
-        $book = bookmill::where('source',$this->source)->where('title', $title)->where('source',$this->source)->where('author', $author)->first();
+        $book = bookmill::where('title', $title)->where('author', $author)->where('source',$this->source)->first();
         $result = [];
         $result['title'] = $title;
         $result['author'] = $author;
@@ -205,10 +202,10 @@ class NovelBiqugeController extends Controller
         $uns = [];
         foreach ($list as $key => $ele) {
             $total++;
-            $nd = NovelDetail::where('source',$this->source)->where([
+            $nd = NovelDetail::where([
                 'book_id' => $book->id,
                 'title' => $ele->plaintext,
-            ])->first();
+            ])->where('source',$this->source)->first();
        
             if (!$nd) {
                 $add++;
@@ -216,7 +213,7 @@ class NovelBiqugeController extends Controller
                     'book_id' => $book->id,
                     'catalog_id' => $key,
                     'title' => $ele->plaintext,
-                    'source_href' => $this->siteUrl . $ele->href,
+                    'source_href' => $ele->href,
                     'source' => $this->source,
                 ]);
             }

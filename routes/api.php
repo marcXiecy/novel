@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\NovelBiquge5200Controller;
 use App\Http\Controllers\api\NovelBiqugeController;
 use App\Http\Controllers\api\NovelController;
 use App\Http\Controllers\api\WxUserController;
@@ -45,6 +46,19 @@ Route::prefix('/novel/biquge/')->group(function () {
     Route::any('/shelf/remove', [NovelBiqugeController::class,'removeBookFromShelf']);
     Route::any('/shelf/check', [NovelBiqugeController::class,'checkBookInShelf']);
     Route::any('/saveCatalog', [NovelBiqugeController::class,'saveCatalog']);
+});
+
+Route::prefix('/novel/biquge5200/')->group(function () {
+    Route::get('/search', [NovelBiquge5200Controller::class,'search']);
+    Route::get('/catalog', [NovelBiquge5200Controller::class,'catalog']);
+    Route::get('/saveCatalog', [NovelBiquge5200Controller::class,'saveCatalog']);
+    Route::get('/article', [NovelBiquge5200Controller::class,'article']);
+    Route::get('/book_info', [NovelBiquge5200Controller::class,'book_info']);
+    Route::get('/shelf', [NovelBiquge5200Controller::class,'shelf']);
+    Route::any('/shelf/add', [NovelBiquge5200Controller::class,'addBookToShelf']);
+    Route::any('/shelf/remove', [NovelBiquge5200Controller::class,'removeBookFromShelf']);
+    Route::any('/shelf/check', [NovelBiquge5200Controller::class,'checkBookInShelf']);
+    Route::any('/saveCatalog', [NovelBiquge5200Controller::class,'saveCatalog']);
 });
 
 Route::prefix('/wxusers')->group(function () {
