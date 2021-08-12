@@ -17,7 +17,7 @@ class NovelService extends BaseService
 
     public function book_info($author,$title,string $source)
     {
-        $book = bookmill::where('source',$this->source)->where(['title' => $title, 'author' => $author])->first();
+        $book = bookmill::where('source',$source)->where(['title' => $title, 'author' => $author])->first();
         if ($book) {
             return $this->apiOut($book);
         } else {
@@ -54,11 +54,11 @@ class NovelService extends BaseService
             'url' => $url,
             'image' => $image,
             'newest' => $newest,
-            'source' => $this->source,
+            'source' => $source,
         ];
-        $book = bookmill::where('source',$this->source)->where(['title' => $title, 'author' => $author])->first();
+        $book = bookmill::where('source',$source)->where(['title' => $title, 'author' => $author])->first();
         if ($book) {
-            $result = bookmill::where('source',$this->source)->where('id', $book->id)->update($condition);
+            $result = bookmill::where('source',$source)->where('id', $book->id)->update($condition);
             $book_id = $book->id;
         } else {
             $result = bookmill::create($condition);
@@ -81,7 +81,7 @@ class NovelService extends BaseService
         if ($shelf) {
             return $this->apiOut('', 0);
         }
-        $r = shelf::create(['user_id' => $user->id, 'book_id' => $book->id, 'url' => $book->url, 'source' => $this->source,]);
+        $r = shelf::create(['user_id' => $user->id, 'book_id' => $book->id, 'url' => $book->url, 'source' => $source,]);
         return $this->apiOut($r, $r ? 1 : 0);
     }
 
