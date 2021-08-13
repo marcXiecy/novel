@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Session;
 // 小程序代码上传密钥 wx563fec61a0a7f915
 class NovelDingDianController extends Controller
 {
-    private $siteUrl = "https://www.booktxt.net";
-    private $source = 'dingdian'; 
+    public $siteUrl = "https://www.booktxt.net";
+    public $source = 'dingdian'; 
     public function search(Request $request)
     {
         $keyword = $request->input('keyword');
@@ -117,6 +117,8 @@ class NovelDingDianController extends Controller
 
         $texts = $content[0];
         $texts = str_replace('<br />', '|', $texts);
+        $texts = str_replace(' ','' ,$texts);
+        $texts = str_replace('　','' ,$texts);
         $texts = strip_tags($texts);
         $texts = explode('||', $texts);
         foreach ($texts as $ele) {
@@ -135,41 +137,6 @@ class NovelDingDianController extends Controller
             $result['c_title'] = $detail_log->title;
         }
         return $this->apiOut($result);
-    }
-
-    public function book_info(Request $request)
-    {
-        $author = $request->input('author');
-        $title = $request->input('title');
-        return app()->make('NovelService')->book_info($author,$title,$this->source);
-    }
-
-    public function shelf()
-    {
-        return app()->make('NovelService')->shelf($this->source);
-    }
-
-    private function addBookToMill($title, $author, $url, $image,$newest)
-    {
-        return app()->make('NovelService')->addBookToMill($title, $author, $url, $image,$newest,$this->source);
-    }
-
-    public function addBookToShelf(Request $request)
-    {
-        $book_id = $request->input('book_id');
-        return app()->make('NovelService')->addBookToShelf($book_id, $this->source);
-    }
-
-    public function removeBookFromShelf(Request $request)
-    {
-        $id = $request->input('id');
-        return app()->make('NovelService')->removeBookFromShelf($id, $this->source);
-    }
-
-    public function checkBookInShelf(Request $request)
-    {
-        $url = $request->input('url');
-        return app()->make('NovelService')->checkBookInShelf($url, $this->source);
     }
 
     public function saveCatalog(Request $request)

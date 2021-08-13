@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Session;
 // 小程序代码上传密钥 wx563fec61a0a7f915
 class NovelBiquge5200Controller extends Controller
 {
-    private $siteUrl = "http://www.b520.cc/";
-    private $source = 'xbiquge5200'; 
+    public $siteUrl = "http://www.b520.cc/";
+    public $source = 'xbiquge5200'; 
     public function search(Request $request)
     {
         $keyword = $request->input('keyword');
@@ -132,42 +132,6 @@ class NovelBiquge5200Controller extends Controller
         }
         return $this->apiOut($result);
     }
-
-    public function book_info(Request $request)
-    {
-        $author = $request->input('author');
-        $title = $request->input('title');
-        return app()->make('NovelService')->book_info($author,$title,$this->source);
-    }
-
-    public function shelf()
-    {
-        return app()->make('NovelService')->shelf($this->source);
-    }
-
-    private function addBookToMill($title, $author, $url, $image,$newest)
-    {
-        return app()->make('NovelService')->addBookToMill($title, $author, $url, $image,$newest,$this->source);
-    }
-
-    public function addBookToShelf(Request $request)
-    {
-        $book_id = $request->input('book_id');
-        return app()->make('NovelService')->addBookToShelf($book_id, $this->source);
-    }
-
-    public function removeBookFromShelf(Request $request)
-    {
-        $id = $request->input('id');
-        return app()->make('NovelService')->removeBookFromShelf($id, $this->source);
-    }
-
-    public function checkBookInShelf(Request $request)
-    {
-        $url = $request->input('url');
-        return app()->make('NovelService')->checkBookInShelf($url, $this->source);
-    }
-
 
     // const novel_hrefs = ['http://www.xbiquge.la/10/10489/'];
 
