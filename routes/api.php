@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\api\EnumController;
 use App\Http\Controllers\api\NovelBiquge5200Controller;
 use App\Http\Controllers\api\NovelBiqugeController;
 use App\Http\Controllers\api\NovelController;
+use App\Http\Controllers\api\NovelDingDianController;
 use App\Http\Controllers\api\WxUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -61,6 +63,19 @@ Route::prefix('/novel/biquge5200/')->group(function () {
     Route::any('/saveCatalog', [NovelBiquge5200Controller::class,'saveCatalog']);
 });
 
+Route::prefix('/novel/dingdian/')->group(function () {
+    Route::get('/search', [NovelDingDianController::class,'search']);
+    Route::get('/catalog', [NovelDingDianController::class,'catalog']);
+    Route::get('/saveCatalog', [NovelDingDianController::class,'saveCatalog']);
+    Route::get('/article', [NovelDingDianController::class,'article']);
+    Route::get('/book_info', [NovelDingDianController::class,'book_info']);
+    Route::get('/shelf', [NovelDingDianController::class,'shelf']);
+    Route::any('/shelf/add', [NovelDingDianController::class,'addBookToShelf']);
+    Route::any('/shelf/remove', [NovelDingDianController::class,'removeBookFromShelf']);
+    Route::any('/shelf/check', [NovelDingDianController::class,'checkBookInShelf']);
+    Route::any('/saveCatalog', [NovelDingDianController::class,'saveCatalog']);
+});
+
 Route::prefix('/wxusers')->group(function () {
     Route::any('/checkSession', [WxUserController::class,'checkSession']);
     Route::any('/code2session/{code}', [WxUserController::class,'Code2Session']);
@@ -68,4 +83,8 @@ Route::prefix('/wxusers')->group(function () {
     Route::any('/getCurrentUser', [WxUserController::class,'getCurrentUser']);
     Route::any('/updateUser', [WxUserController::class,'updateUser']);
     Route::any('/updateUserPhone', [WxUserController::class,'updateUserPhone']);
+});
+
+Route::prefix('/enums')->group(function () {
+    Route::any('/sources', [EnumController::class,'sources']);
 });

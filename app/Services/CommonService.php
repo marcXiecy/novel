@@ -8,6 +8,8 @@
 
 namespace App\Services;
 
+use GuzzleHttp\Client;
+
 class CommonService
 {
     /**
@@ -22,7 +24,7 @@ class CommonService
         $httpInfo = array();
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36');
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 Edg/92.0.902.67');
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -46,11 +48,11 @@ class CommonService
                 curl_setopt($ch, CURLOPT_URL, $url);
             }
         }
-
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1); 
         $response = curl_exec($ch);
 
         if ($response === false) {
-            //echo "cURL Error: " . curl_error($ch);
+            // echo "cURL Error: " . curl_error($ch);
             return false;
         }
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);

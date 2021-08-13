@@ -46,6 +46,8 @@
 
 namespace App\Functions;
 
+use Exception;
+
 define('HDOM_TYPE_ELEMENT', 1);
 define('HDOM_TYPE_COMMENT', 2);
 define('HDOM_TYPE_TEXT',    3);
@@ -871,7 +873,8 @@ class simple_html_dom_node
             if ((strcasecmp($targetCharset, 'UTF-8') == 0) && ($this->is_utf8($text))) {
                 $converted_text = $text;
             } else {
-                $converted_text = iconv($sourceCharset, $targetCharset, $text);
+                // $converted_text = iconv($sourceCharset, $targetCharset, $text);
+                $converted_text = mb_convert_encoding($text, $targetCharset, $sourceCharset);
             }
         }
 
