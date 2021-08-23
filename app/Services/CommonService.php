@@ -21,10 +21,12 @@ class CommonService
      */
     public static function curl($url, $params = false, $ispost = 0, $https = 0, $gzip = 0)
     {
+
         $httpInfo = array();
         $ch = curl_init();
+        // curl_setopt($ch, CURLOPT_HTTPHEADER,[]);
         curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 Edg/92.0.902.67');
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36 Edg/92.0.902.78');
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -59,5 +61,21 @@ class CommonService
         $httpInfo = array_merge($httpInfo, curl_getinfo($ch));
         curl_close($ch);
         return $response;
+    }
+
+    public function httpClient($url, $params = [], $ispost = 0){
+        $client = new Client();
+        if ($ispost) {
+            $res = $client->post($url,$params);
+        } else {
+            if ($params) {
+                if (is_array($params)) {
+                    $params = http_build_query($params);
+                }
+                $url = $url . '?' . $params;
+            } 
+            $res = $client->get($url);
+        }
+        return $res->getBody()->getContents();
     }
 }

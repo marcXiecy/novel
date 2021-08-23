@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Events\refreshBookEvent;
 use App\Functions\simple_html_dom;
 use App\Http\Controllers\Controller;
 use App\Models\bookmill;
@@ -11,15 +10,14 @@ use App\Models\shelf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
-// 小程序代码上传密钥 wx563fec61a0a7f915
-class NovelBiquge5200Controller extends Controller
+class NovelBiqugeB5200Controller extends Controller
 {
-    public $siteUrl = "http://www.b520.cc/";
-    public $source = 'xbiquge5200'; 
+    public $siteUrl = "http://www.b5200.net/";
+    public $source = 'xbiqugeb5200'; 
     public function search(Request $request)
     {
         $keyword = $request->input('keyword');
-        $books = app()->make('CommonService')->curl($this->siteUrl . 'modules/article/search.php', ['searchkey' => $keyword], false);
+        $books = app()->make('CommonService')->httpClient($this->siteUrl . 'modules/article/search.php', ['searchkey' => $keyword]);
         $htmlObj = new simple_html_dom();    //工具类对象初始化
         $htmlObj->load($books);
 
@@ -49,7 +47,7 @@ class NovelBiquge5200Controller extends Controller
             $book = bookmill::where(['id' => $book_id])->where('source',$this->source)->first();
             $catalog_url = $book->url;
         }
-        $catalog = app()->make('CommonService')->curl($catalog_url, 0, 0, 0, 1);
+        $catalog = app()->make('CommonService')->httpClient($catalog_url);
         $htmlObj = new simple_html_dom();    //工具类对象初始化
         $htmlObj->load($catalog);
         $title = $htmlObj->find('div[id=info] h1', 0);
@@ -97,9 +95,9 @@ class NovelBiquge5200Controller extends Controller
                 }
             }
         }
-        $article = app()->make('CommonService')->curl($article_url, 0, 0, 0, 1);
+        $article = app()->make('CommonService')->httpClient($article_url);
         $htmlObj = new simple_html_dom();    //工具类对象初始化
-        $htmlObj->load($article);echo($htmlObj);die;
+        $htmlObj->load($article);
         $bookname = $htmlObj->find('div[class=con_top] a', 1);
         $bookname = $bookname->plaintext;
 
@@ -119,7 +117,7 @@ class NovelBiquge5200Controller extends Controller
 
         foreach ($content as $ele) {
             $temp = [];
-            $temp['text'] = $ele->plaintext;
+            $temp['text'] = str_replace('　　','',$ele->plaintext);
             $temp['type'] = "content";
             $result['article'][] = $temp;
         }
@@ -143,7 +141,7 @@ class NovelBiquge5200Controller extends Controller
             $book = bookmill::where(['id' => $book_id])->where('source',$this->source)->first();
             $catalog_url = $book->url;
         }
-        $catalog = app()->make('CommonService')->curl($catalog_url, 0, 0, 0, 1);
+        $catalog = app()->make('CommonService')->httpClient($catalog_url);
         $htmlObj = new simple_html_dom();    //工具类对象初始化
         $htmlObj->load($catalog);
         $title = $htmlObj->find('div[id=info] h1', 0);
