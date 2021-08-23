@@ -99,7 +99,7 @@ class NovelBiquge5200Controller extends Controller
         }
         $article = app()->make('CommonService')->curl($article_url, 0, 0, 0, 1);
         $htmlObj = new simple_html_dom();    //工具类对象初始化
-        $htmlObj->load($article);echo($htmlObj);die;
+        $htmlObj->load($article);
         $bookname = $htmlObj->find('div[class=con_top] a', 1);
         $bookname = $bookname->plaintext;
 
