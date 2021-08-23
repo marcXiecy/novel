@@ -17,7 +17,7 @@ class NovelBiqugeB5200Controller extends Controller
     public function search(Request $request)
     {
         $keyword = $request->input('keyword');
-        $books = app()->make('CommonService')->httpClient($this->siteUrl . 'modules/article/search.php', ['searchkey' => $keyword]);
+        $books = app()->make('CommonService')->curl($this->siteUrl . 'modules/article/search.php', ['searchkey' => $keyword]);
         $htmlObj = new simple_html_dom();    //工具类对象初始化
         $htmlObj->load($books);
 
@@ -47,7 +47,7 @@ class NovelBiqugeB5200Controller extends Controller
             $book = bookmill::where(['id' => $book_id])->where('source',$this->source)->first();
             $catalog_url = $book->url;
         }
-        $catalog = app()->make('CommonService')->httpClient($catalog_url);
+        $catalog = app()->make('CommonService')->curl($catalog_url);
         $htmlObj = new simple_html_dom();    //工具类对象初始化
         $htmlObj->load($catalog);
         $title = $htmlObj->find('div[id=info] h1', 0);
@@ -95,7 +95,7 @@ class NovelBiqugeB5200Controller extends Controller
                 }
             }
         }
-        $article = app()->make('CommonService')->httpClient($article_url);
+        $article = app()->make('CommonService')->curl($article_url);
         $htmlObj = new simple_html_dom();    //工具类对象初始化
         $htmlObj->load($article);
         $bookname = $htmlObj->find('div[class=con_top] a', 1);
@@ -141,7 +141,7 @@ class NovelBiqugeB5200Controller extends Controller
             $book = bookmill::where(['id' => $book_id])->where('source',$this->source)->first();
             $catalog_url = $book->url;
         }
-        $catalog = app()->make('CommonService')->httpClient($catalog_url);
+        $catalog = app()->make('CommonService')->curl($catalog_url);
         $htmlObj = new simple_html_dom();    //工具类对象初始化
         $htmlObj->load($catalog);
         $title = $htmlObj->find('div[id=info] h1', 0);
