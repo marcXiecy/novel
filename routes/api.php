@@ -6,6 +6,7 @@ use App\Http\Controllers\api\NovelBiquge5200Controller;
 use App\Http\Controllers\api\NovelBiqugeController;
 use App\Http\Controllers\api\NovelController;
 use App\Http\Controllers\api\NovelDingDianController;
+use App\Http\Controllers\api\NovelQbiqugeController;
 use App\Http\Controllers\api\WxUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -88,6 +89,19 @@ Route::prefix('/novel/dingdian/')->group(function () {
     Route::any('/shelf/remove', [NovelDingDianController::class,'removeBookFromShelf']);
     Route::any('/shelf/check', [NovelDingDianController::class,'checkBookInShelf']);
     Route::any('/saveCatalog', [NovelDingDianController::class,'saveCatalog']);
+});
+
+Route::prefix('/novel/qbiquge/')->group(function () {
+    Route::get('/search', [NovelQbiqugeController::class,'search']);
+    Route::get('/catalog', [NovelQbiqugeController::class,'catalog']);
+    Route::get('/saveCatalog', [NovelQbiqugeController::class,'saveCatalog']);
+    Route::get('/article', [NovelQbiqugeController::class,'article']);
+    Route::get('/book_info', [NovelQbiqugeController::class,'book_info']);
+    Route::get('/shelf', [NovelQbiqugeController::class,'shelf']);
+    Route::any('/shelf/add', [NovelQbiqugeController::class,'addBookToShelf']);
+    Route::any('/shelf/remove', [NovelQbiqugeController::class,'removeBookFromShelf']);
+    Route::any('/shelf/check', [NovelQbiqugeController::class,'checkBookInShelf']);
+    Route::any('/saveCatalog', [NovelQbiqugeController::class,'saveCatalog']);
 });
 
 Route::prefix('/wxusers')->group(function () {
