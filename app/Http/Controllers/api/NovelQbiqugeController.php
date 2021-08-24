@@ -62,7 +62,7 @@ class NovelQbiqugeController extends Controller
         $author = $author[1];
         $list = $htmlObj->find('div[id=list] a');
         $image = $htmlObj->find('div[id=fmimg] img', 0);
-        $image = $image->src;
+        $image = $this->siteUrl .$image->src;
       
         $result = [];
         $result['title'] = $title;
@@ -107,8 +107,8 @@ class NovelQbiqugeController extends Controller
 
 
         $content = $htmlObj->find('div[id=content]');
-        $preview = $htmlObj->find('div[class=bottem2] a', 1);
-        $next = $htmlObj->find('div[class=bottem2] a', 3);
+        $preview = $htmlObj->find('div[class=bottem2] a',2);
+        $next = $htmlObj->find('div[class=bottem2] a', 4);
         $title = $htmlObj->find('div[class=bookname] h1', 0);
         $result = [];
 
