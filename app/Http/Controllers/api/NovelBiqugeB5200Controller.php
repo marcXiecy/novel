@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Session;
 
 class NovelBiqugeB5200Controller extends Controller
 {
-    public $siteUrl = "http://www.b5200.net/";
+    public $siteUrl = "https://www.b5200.net/";
     public $source = 'xbiqugeb5200'; 
     public function search(Request $request)
     {
