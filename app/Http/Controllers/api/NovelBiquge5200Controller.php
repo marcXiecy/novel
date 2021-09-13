@@ -51,7 +51,7 @@ class NovelBiquge5200Controller extends Controller
         }
         $catalog = app()->make('CommonService')->curl($catalog_url, 0, 0, 0, 1);
         $htmlObj = new simple_html_dom();    //工具类对象初始化
-        $htmlObj->load($catalog);       echo $htmlObj;die;
+        $htmlObj->load($catalog);       echo $catalog;die;
         $title = $htmlObj->find('div[id=info] h1', 0);
         $title = $title->plaintext;
         $author = $htmlObj->find('div[id=info] p', 0);
