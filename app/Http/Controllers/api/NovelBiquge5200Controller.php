@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Session;
 // 小程序代码上传密钥 wx563fec61a0a7f915
 class NovelBiquge5200Controller extends Controller
 {
-    public $siteUrl = "http://www.b520.cc/";
+    public $siteUrl = "https://www.b520.cc/";
     public $source = 'xbiquge5200'; 
     public function search(Request $request)
     {
@@ -22,7 +22,7 @@ class NovelBiquge5200Controller extends Controller
         $books = app()->make('CommonService')->curl($this->siteUrl . 'modules/article/search.php', ['searchkey' => $keyword], false);
         $htmlObj = new simple_html_dom();    //工具类对象初始化
         $htmlObj->load($books);
-
+ 
         $tr = $htmlObj->find('.grid tr');
         $result = [];
         foreach ($tr as $k => $ele) {
@@ -51,7 +51,7 @@ class NovelBiquge5200Controller extends Controller
         }
         $catalog = app()->make('CommonService')->curl($catalog_url, 0, 0, 0, 1);
         $htmlObj = new simple_html_dom();    //工具类对象初始化
-        $htmlObj->load($catalog);
+        $htmlObj->load($catalog);       echo $htmlObj;die;
         $title = $htmlObj->find('div[id=info] h1', 0);
         $title = $title->plaintext;
         $author = $htmlObj->find('div[id=info] p', 0);
