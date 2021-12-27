@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
         //     wxUser::where('id',1)->increment('gender');
         // })->everyMinute();
         // $schedule->call(new RefreshBook)->everyFourHours();
-        $schedule->command('stock:jisilu-kezhuanzhai')->dailyAt('09:00');
+        $schedule->command('stock:jisilu-kezhuanzhai')->weekdays()->at('09:00');
     }
 
     /**
