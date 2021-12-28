@@ -28,8 +28,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->call(new RefreshBook)->everyFourHours();
         // $schedule->command('stock:jisilu-kezhuanzhai')->everyMinute();
-        // $schedule->command('stock:jisilu-kezhuanzhai')->weekdays()->at('11:50');
-        $schedule->command('stock:jisilu-kezhuanzhai')->dailyAt('11:53');
+        $schedule->command('stock:jisilu-kezhuanzhai')->weekdays()->at('11:57');
+        // $schedule->command('stock:jisilu-kezhuanzhai')->dailyAt('11:53');
         // $schedule->command('stock:jisilu-kezhuanzhai')->everyMinute();
     }
 
