@@ -19,7 +19,7 @@ class Jisilu extends Command
 
     public function handle()
     {
-        Log::channel('daily')->info('Jisilu: start' . Carbon::now()->toda);
+        Log::channel('daily')->info('Jisilu: start' . Carbon::now()->toDateTime());
         $httpClient = new Client();
         $url = 'https://www.jisilu.cn/data/cbnew/pre_list/?___jsl=LST___t=' . time();
         $res = $httpClient->get(
