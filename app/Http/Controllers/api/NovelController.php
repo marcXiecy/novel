@@ -38,8 +38,6 @@ class NovelController extends Controller
 
     public function catalog(Request $request)
     {
-        Log::channel('daily')->info('time test' . Carbon::now());
-        dd(Carbon::now());
         $catalog_url = $request->input('catalog_url');
         $catalog = app()->make('CommonService')->curl($catalog_url);
 
