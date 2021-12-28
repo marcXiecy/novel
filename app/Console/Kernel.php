@@ -27,10 +27,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->call(new RefreshBook)->everyFourHours();
-        // $schedule->command('stock:jisilu-kezhuanzhai')->everyMinute();
         $schedule->command('stock:jisilu-kezhuanzhai')->weekdays()->at('09:00');
-        // $schedule->command('stock:jisilu-kezhuanzhai')->dailyAt('11:53');
-        // $schedule->command('stock:jisilu-kezhuanzhai')->everyMinute();
+        $schedule->command('smzdm:sign')->weekdays()->at('09:01');
     }
 
     /**
