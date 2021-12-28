@@ -6,8 +6,10 @@ use App\Functions\simple_html_dom;
 use App\Http\Controllers\Controller;
 use App\Models\bookmill;
 use App\Models\shelf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Log;
 use PDO;
 
 // 小程序代码上传密钥 wx563fec61a0a7f915
@@ -36,6 +38,8 @@ class NovelController extends Controller
 
     public function catalog(Request $request)
     {
+        Log::channel('daily')->info('Jisilu: start' . Carbon::now());
+        dd(Carbon::now());
         $catalog_url = $request->input('catalog_url');
         $catalog = app()->make('CommonService')->curl($catalog_url);
 
@@ -50,7 +54,7 @@ class NovelController extends Controller
         $list = $htmlObj->find('div[id=list] a');
         $image = $htmlObj->find('div[id=fmimg] img', 0);
         $image = $image->src;
-        $this->addBookToMill($title, $author, $catalog_url, $image);
+        // $this->addBookToMill($title, $author, $catalog_url, $image);
         $result = [];
         $result['title'] = $title;
         $result['author'] = $author;
@@ -119,34 +123,7 @@ class NovelController extends Controller
             return $this->apiOut('', 0);
         }
     }
-    
-    public function shelf(Request $request)
-    {
-        $user = Session::get('wxUser');
-        if ($user) {
-            $shelf = shelf::with('book')->where('user_id', $user->id)->get();
-            return $this->apiOut($shelf);
-        } else {
-            return $this->apiOut('', 0, '失败');
-        }
-    }
 
-    private function addBookToMill($title, $author, $url, $image)
-    {
-        $condition = [
-            'title' => $title,
-            'author' => $author,
-            'url' => $url,
-            'image' => $image,
-        ];
-        $book = bookmill::where(['title'=>$title,'author'=>$author])->first();
-        if ($book) {
-            bookmill::where('id', $book->id)->update($condition);
-        } else {
-            bookmill::create($condition);
-        }
-        return true;
-    }
 
     public function addBookToShelf(Request $request)
     {
