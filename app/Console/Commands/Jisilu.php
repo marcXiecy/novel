@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
+use Log;
 
 class Jisilu extends Command
 {
@@ -18,6 +19,7 @@ class Jisilu extends Command
 
     public function handle()
     {
+        Log::info('Jisilu: start');
         $httpClient = new Client();
         $url = 'https://www.jisilu.cn/data/cbnew/pre_list/?___jsl=LST___t=' . time();
         $res = $httpClient->get(

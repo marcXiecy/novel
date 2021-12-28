@@ -26,11 +26,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
-        // $schedule->call(function () {
-        //     wxUser::where('id',1)->increment('gender');
-        // })->everyMinute();
         // $schedule->call(new RefreshBook)->everyFourHours();
+        // $schedule->command('stock:jisilu-kezhuanzhai')->everyMinute();
         $schedule->command('stock:jisilu-kezhuanzhai')->weekdays()->at('09:00');
     }
 
