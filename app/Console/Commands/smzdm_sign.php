@@ -37,9 +37,7 @@ class smzdm_sign extends Command
             );
             $res = $res->getBody()->getContents();
             $res = mb_substr($res, 9, -1);
-
             $res = json_decode($res, true);
-
             if ($res['error_code'] == 0) {
                 app(CommandService::class)->sc_send('今日张大妈签到成功 - ' . Carbon::now());
             } else {
