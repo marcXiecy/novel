@@ -139,7 +139,10 @@ class NovelbiqugeFController extends Controller
             $result['article'][] = $temp;
         }
         $result['preview'] = $preview->href;
-        $result['next'] = $next->href;
+        if(substr($next->href,1,3) != 'bqg')
+            $result['next'] = $htmlObj->find('.section-opt a', 2)->href . $next->href;
+        else
+            $result['next'] = $next->href;
         //详情页title和目录页title有时候不一样，需要返回目录页title进行定位
         $detail_log = NovelDetail::where('source_href',$article_url)->where('source',$this->source)->first();
         if($detail_log){
