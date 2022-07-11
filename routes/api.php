@@ -4,6 +4,7 @@ use App\Http\Controllers\api\EnumController;
 use App\Http\Controllers\api\NovelBiqugeB5200Controller;
 use App\Http\Controllers\api\NovelBiquge5200Controller;
 use App\Http\Controllers\api\NovelBiqugeController;
+use App\Http\Controllers\api\NovelbiqugeFController;
 use App\Http\Controllers\api\NovelController;
 use App\Http\Controllers\api\NovelCV148Controller;
 use App\Http\Controllers\api\NovelDingDianController;
@@ -118,6 +119,19 @@ Route::prefix('/novel/cv148/')->group(function () {
     Route::any('/saveCatalog', [NovelCV148Controller::class,'saveCatalog']);
 });
 
+Route::prefix('/novel/fyrsks/')->group(function () {
+    Route::get('/search', [NovelbiqugeFController::class,'search']);
+    Route::get('/catalog', [NovelbiqugeFController::class,'catalog']);
+    Route::get('/saveCatalog', [NovelbiqugeFController::class,'saveCatalog']);
+    Route::get('/article', [NovelbiqugeFController::class,'article']);
+    Route::get('/book_info', [NovelbiqugeFController::class,'book_info']);
+    Route::get('/shelf', [NovelbiqugeFController::class,'shelf']);
+    Route::any('/shelf/add', [NovelbiqugeFController::class,'addBookToShelf']);
+    Route::any('/shelf/remove', [NovelbiqugeFController::class,'removeBookFromShelf']);
+    Route::any('/shelf/check', [NovelbiqugeFController::class,'checkBookInShelf']);
+    Route::any('/saveCatalog', [NovelbiqugeFController::class,'saveCatalog']);
+});
+
 Route::prefix('/wxusers')->group(function () {
     Route::any('/checkSession', [WxUserController::class,'checkSession']);
     Route::any('/code2session/{code}', [WxUserController::class,'Code2Session']);
@@ -129,4 +143,8 @@ Route::prefix('/wxusers')->group(function () {
 
 Route::prefix('/enums')->group(function () {
     Route::any('/sources', [EnumController::class,'sources']);
+});
+
+Route::prefix('/snow')->group(function () {
+    Route::any('/', [EnumController::class,'sources']);
 });
