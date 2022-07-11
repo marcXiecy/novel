@@ -103,7 +103,6 @@ class NovelbiqugeFController extends Controller
             }
         }
         $article = app()->make('CommonService')->curl($this->siteUrl . $article_url, 0, 0, 0, 1);
-
         $htmlObj = new simple_html_dom();    //工具类对象初始化
         $htmlObj->load($article);
         // $bookname = $htmlObj->find('div[class=con_top] a', 1);
@@ -123,6 +122,9 @@ class NovelbiqugeFController extends Controller
 
 
         $texts = $content[0];
+
+        $texts = preg_replace("/(<a.*?>[\s\S]*?<\/a>)/","",$texts);
+        $texts = preg_replace('%<div class="posterror">(.+?)</div>%',"",$texts);
         $texts = str_replace('<br />', '||', $texts);
         $texts = str_replace(' ','' ,$texts);
         $texts = str_replace('　','' ,$texts);
