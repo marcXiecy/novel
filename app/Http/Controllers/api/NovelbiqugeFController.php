@@ -140,7 +140,7 @@ class NovelbiqugeFController extends Controller
         }
         $result['preview'] = $preview->href;
         if(substr($next->href,1,3) != 'bqg')
-            $result['next'] = $htmlObj->find('.section-opt a', 2)->href . $next->href;
+            $result['next'] = $htmlObj->find('.section-opt a', 1)->href . $next->href;
         else
             $result['next'] = $next->href;
         //详情页title和目录页title有时候不一样，需要返回目录页title进行定位
