@@ -146,7 +146,8 @@ class NovelbiqugeFController extends Controller
 
         if (substr($next->href, 1, 3) != 'bqg') {
 
-            unset($result['article'][0]);
+            $result['article'][0]['text'] = '';
+            $result['article'][0]['type'] = 'content';
             $result['next'] = $htmlObj->find('.section-opt a', 1)->href . $next->href;
         } else
             $result['next'] = $next->href;
