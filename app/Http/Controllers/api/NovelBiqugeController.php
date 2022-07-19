@@ -120,6 +120,10 @@ class NovelBiqugeController extends Controller
         $texts = str_replace('&nbsp;', '', $texts);
         $texts = str_replace(["\r", "\n"], '', $texts);
         $texts = str_replace('7017k', '', trim($texts));
+        $texts = str_replace('┠', '', trim($texts));
+        $texts = str_replace('┨', '', trim($texts));
+        $texts = str_replace(['&lt;', '/br', '&gt;'], '', trim($texts));
+        $texts = trim($texts);
         $texts = explode('|||', $texts);
         foreach ($texts as $ele) {
             if ($ele) {
