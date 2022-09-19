@@ -58,8 +58,10 @@ class Novel56Controller extends Controller
         $author = explode("：", $author);
         $author = $author[1];
         $list = $htmlObj->find('.bookinfo_td td a');
-        $image = null;
 
+        $booknum = explode("/",$catalog_url)[7];
+        $image = $catalog_url . $booknum . 's.jpg';
+        $image = str_replace('html','image',$image);
 
         $result = [];
         $result['title'] = $title;
