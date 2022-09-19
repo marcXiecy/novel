@@ -16,6 +16,7 @@ class EnumController extends Controller
              ['value' => 'cv148','title'=>'新笔趣阁cv148'],
              ['value' => 'dingdian','title'=>'顶点小说'],
              ['value' => 'fyrsks','title'=>'笔趣阁F'],
+             ['value' => '56shuku','title'=>'56书库'],
         ]);
     }
 }
