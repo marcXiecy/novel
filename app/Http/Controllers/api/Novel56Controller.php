@@ -118,9 +118,9 @@ class Novel56Controller extends Controller
 
         $table = $htmlObj->find('div[id=bgdiv] table', 1);
         $title = $table->find('h1',0);
-        $next = $table->find('div[id=thumb] a', 0);
+        $preview = $table->find('div[id=thumb] a', 0);
         $baseurl = $table->find('div[id=thumb] a', 1);
-        $preview = $table->find('div[id=thumb] a', 2);
+        $next = $table->find('div[id=thumb] a', 2);
 
         $content = $table->find('div[id=content] p',0);
         $result = [];
