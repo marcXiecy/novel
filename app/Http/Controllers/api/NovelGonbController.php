@@ -111,7 +111,7 @@ class NovelGonbController extends Controller
 
         $title = $htmlObj->find('.bookname h1',0);
         $preview = $htmlObj->find('div[class=bottem2] a', 1);
-        $next = $htmlObj->find('div[id=bottem2] a', 3);
+        $next = $htmlObj->find('div[class=bottem2] a', 3);
 
         $content = $htmlObj->find('div[id=content]',0);
         $result = [];
@@ -131,8 +131,8 @@ class NovelGonbController extends Controller
             $result['article'][] = $temp;
         }
 
-        $result['preview'] = $this->siteUrl . substr($preview->href,2);
-        $result['next'] = $this->siteUrl . substr($next->href,2);
+        $result['preview'] = $this->siteUrl . $preview->href;
+        $result['next'] = $this->siteUrl . $next->href;
         //详情页title和目录页title有时候不一样，需要返回目录页title进行定位
         $detail_log = NovelDetail::where('source_href', $article_url)->where('source', $this->source)->first();
         if ($detail_log) {
