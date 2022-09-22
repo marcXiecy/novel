@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Session;
 class NovelGonbController extends Controller
 {
     public $siteUrl = "https://www.gonb.org";
-    public $source = '56shuku';
+    public $source = 'gonb';
     public function search(Request $request)
     {
         $keyword = $request->input('keyword');
