@@ -124,6 +124,9 @@ class NovelGonbController extends Controller
         $content = explode("\r\n\r\n",$content->plaintext);
         array_pop($content);
         foreach ($content as $ele) {
+            if(strstr($ele,'有的人死了，但没有完全死')){
+                break;
+            }
             $temp = [];
             $temp['text'] = str_replace('&nbsp;', '', $ele);
             $temp['text'] = str_replace('　　', '', $temp['text']);
