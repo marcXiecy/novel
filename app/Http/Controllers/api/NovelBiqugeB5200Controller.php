@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Session;
 
 class NovelBiqugeB5200Controller extends Controller
 {
-    public $siteUrl = "https://www.b5200.net/";
-    public $source = 'xbiqugeb5200'; 
+    public $siteUrl = "http://www.biqu5200.net/";
+    public $source = 'biqu5200'; 
     public function search(Request $request)
     {
         $keyword = $request->input('keyword');

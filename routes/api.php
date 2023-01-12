@@ -56,7 +56,7 @@ Route::prefix('/novel/biquge/')->group(function () {
     Route::any('/saveCatalog', [NovelBiqugeController::class,'saveCatalog']);
 });
 
-Route::prefix('/novel/biquge5200/')->group(function () {
+Route::prefix('/novel/xbiquge5200/')->group(function () {
     Route::get('/search', [NovelBiquge5200Controller::class,'search']);
     Route::get('/catalog', [NovelBiquge5200Controller::class,'catalog']);
     Route::get('/saveCatalog', [NovelBiquge5200Controller::class,'saveCatalog']);
@@ -69,7 +69,7 @@ Route::prefix('/novel/biquge5200/')->group(function () {
     Route::any('/saveCatalog', [NovelBiquge5200Controller::class,'saveCatalog']);
 });
 
-Route::prefix('/novel/xbiqugeb5200/')->group(function () {
+Route::prefix('/novel/biqu5200/')->group(function () {
     Route::get('/search', [NovelBiqugeB5200Controller::class,'search']);
     Route::get('/catalog', [NovelBiqugeB5200Controller::class,'catalog']);
     Route::get('/saveCatalog', [NovelBiqugeB5200Controller::class,'saveCatalog']);
