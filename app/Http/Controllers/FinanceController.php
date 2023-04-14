@@ -91,20 +91,19 @@ class FinanceController extends Controller
         foreach ($newLeft as $keyLeft => $itemLeft) {
             if (key_exists($keyLeft, $newRight)) {
                 $itemRight = $newRight[$keyLeft];
-                $tempRight = $itemRight;
+
+                $tempLeft = $itemLeft;
+
                 foreach ($itemLeft as $subkeyleft => $subLeft) {
-                    $tempLeft = $itemLeft;
                     foreach ($itemRight as $subkeyright => $subRight) {
                         if ($subLeft['left']) {
                             if ($subRight['right'] == $subLeft['left']) {
-                                unset($tempLeft[$subkeyleft], $tempRight[$subkeyright]);
-
+                                unset($tempLeft[$subkeyleft], $itemRight[$subkeyright]);
                                 break;
                             }
                         } else {
                             if ($subRight['left'] == $subLeft['right']) {
-
-                                unset($tempLeft[$subkeyleft], $tempRight[$subkeyright]);
+                                unset($tempLeft[$subkeyleft], $itemRight[$subkeyright]);
                                 break;
                             }
                         }
@@ -113,8 +112,8 @@ class FinanceController extends Controller
                 if (!empty($tempLeft)) {
                     $result['unset']['left'][$keyLeft] = $tempLeft;
                 }
-                if (!empty($tempRight)) {
-                    $result['unset']['right'][$keyLeft] = $tempRight;
+                if (!empty($itemRight)) {
+                    $result['unset']['right'][$keyLeft] = $itemRight;
                 }
                 unset($newRight[$keyLeft]);
             } else {
