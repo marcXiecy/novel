@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\RedisController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,4 +22,8 @@ Route::get('/', function () {
 Route::prefix('/redis')->group(function () {
     Route::get('/index', [RedisController::class,'index']);
     Route::get('/index2', [RedisController::class,'index2']);
+});
+
+Route::prefix('/finance')->group(function () {
+    Route::get('/', [FinanceController::class,'index']);
 });

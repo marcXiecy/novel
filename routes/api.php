@@ -12,8 +12,10 @@ use App\Http\Controllers\api\NovelDingDianController;
 use App\Http\Controllers\api\NovelGonbController;
 use App\Http\Controllers\api\NovelQbiqugeController;
 use App\Http\Controllers\api\WxUserController;
+use App\Http\Controllers\FinanceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Psy\Sudo;
 
 /*
 |--------------------------------------------------------------------------
@@ -175,4 +177,11 @@ Route::prefix('/enums')->group(function () {
 
 Route::prefix('/snow')->group(function () {
     Route::any('/', [EnumController::class,'sources']);
+});
+
+Route::prefix('/finance')->group(function () {
+    Route::any('/analysis', [FinanceController::class,'analysis']);
+    Route::any('/clear', [FinanceController::class,'clear']);
+    Route::any('/set', [FinanceController::class,'set']);
+    Route::any('/excel/import', [FinanceController::class,'importExcel']);
 });
