@@ -18,10 +18,12 @@ class FinanceController extends Controller
     public function index(Request $request)
     {
         $keys = Redis::keys('*finance_*');
-
-
+        $prifix = config('database.redis.options.prefix');
         !$keys && $keys = [];
-
+        foreach($keys as $k=>$v){
+            $key = str_replace($prifix,'',$v);
+            $keys[$k] = $key;
+        }
         return view(
             'finance.index',
             ['request' => $request, 'keys' => $keys]
@@ -31,6 +33,9 @@ class FinanceController extends Controller
     public function analysis()
     {
         $left = Redis::get('finance_left');
+        if(empty($right)){
+            return $this->apiOut([],0,'缺少左侧excel');
+        }
         $left = json_decode($left);
         $left = $left[0];
         // dd($left);
@@ -54,6 +59,9 @@ class FinanceController extends Controller
         // dd($newLeft);
 
         $right = Redis::get('finance_right');
+        if(empty($right)){
+            return $this->apiOut([],0,'缺少右侧excel');
+        }
         $right = json_decode($right);
         $right = $right[0];
         $newRight = [];
@@ -104,7 +112,7 @@ class FinanceController extends Controller
                 $result['unset']['left'][$keyLeft] = $itemLeft;
             }
         }
-        $result['unset']['right'] = array_merge($result['unset']['right'],$newRight);
+        $result['unset']['right'] = array_merge($result['unset']['right'], $newRight);
         // return $this->apiOut($result);
         $filePath = Carbon::now() . '.xlsx';
         $cellData = [
@@ -159,7 +167,7 @@ class FinanceController extends Controller
         if ($request->hasFile('report') && $request->file('report')->isValid()) {
             $file = $request->file('report');
             $data = Excel::toArray([], $request->file('report'));
-            Redis::set('finance_' . $request->type, json_encode($data));
+            Redis::set('finance_' . $request->type .'_' .$file->getClientOriginalName(), json_encode($data));
         } else {
             echo 'error';
             die;
@@ -169,14 +177,16 @@ class FinanceController extends Controller
 
     public function clear()
     {
+        $prifix = config('database.redis.options.prefix');
         $keys = Redis::keys('*finance_*');
-        foreach ($keys as $value) {
-            Redis::del($value);
+        foreach($keys as $v){
+            $key = str_replace($prifix,'',$v);
+            Redis::del($key);
         }
+        return $this->apiOut();
     }
 
     public function set()
     {
-        Redis::del('finance_dhshahsfasdasdasdasd');
     }
 }
