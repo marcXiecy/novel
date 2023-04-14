@@ -33,7 +33,7 @@ class FinanceController extends Controller
     public function analysis()
     {
         $left = Redis::get('finance_left');
-        if(empty($right)){
+        if(empty($left)){
             return $this->apiOut([],0,'缺少左侧excel');
         }
         $left = json_decode($left);
