@@ -54,14 +54,14 @@ class FinanceController extends Controller
             $name = $value[3];
             $temp['left'] = $value[1];
             $temp['right'] = $value[2];
-            if ($value[0]) {
-                $date = Carbon::createFromFormat('Ymd', $value[0]);
-                $temp['date'] = $date->format('Y-m-d');
-                // $temp['date'] = Carbon::parse($value[0])->format('Y-m-d');
-            } else {
-                $temp['date'] = null;
-            }
-
+            // if ($value[0]) {
+            //     $date = Carbon::createFromFormat('Ymd', $value[0]);
+            //     $temp['date'] = $date->format('Y-m-d');
+            //     // $temp['date'] = Carbon::parse($value[0])->format('Y-m-d');
+            // } else {
+            //     $temp['date'] = null;
+            // }
+            $temp['date'] = $value[0];
 
             $newLeft[$name][] = $temp;
         }
