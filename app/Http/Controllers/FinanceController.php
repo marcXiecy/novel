@@ -20,8 +20,8 @@ class FinanceController extends Controller
         $keys = Redis::keys('*finance_*');
         $prifix = config('database.redis.options.prefix');
         !$keys && $keys = [];
-        foreach($keys as $k=>$v){
-            $key = str_replace($prifix,'',$v);
+        foreach ($keys as $k => $v) {
+            $key = str_replace($prifix, '', $v);
             $keys[$k] = $key;
         }
         return view(
@@ -30,11 +30,20 @@ class FinanceController extends Controller
         );
     }
 
+    private function redisKey(string $pattern)
+    {
+        $prifix = config('database.redis.options.prefix');
+        $key = Redis::keys($pattern)[0];
+        $key = str_replace($prifix, '', $key);
+        return $key;
+    }
+
     public function analysis()
     {
-        $left = Redis::get('finance_left');
-        if(empty($left)){
-            return $this->apiOut([],0,'缺少左侧excel');
+        
+        $left = Redis::get($this->redisKey('*finance_left*'));
+        if (empty($left)) {
+            return $this->apiOut([], 0, '缺少左侧excel');
         }
         $left = json_decode($left);
         $left = $left[0];
@@ -58,9 +67,9 @@ class FinanceController extends Controller
         }
         // dd($newLeft);
 
-        $right = Redis::get('finance_right');
-        if(empty($right)){
-            return $this->apiOut([],0,'缺少右侧excel');
+        $right = Redis::get($this->redisKey('*finance_right*'));
+        if (empty($right)) {
+            return $this->apiOut([], 0, '缺少右侧excel');
         }
         $right = json_decode($right);
         $right = $right[0];
@@ -167,7 +176,7 @@ class FinanceController extends Controller
         if ($request->hasFile('report') && $request->file('report')->isValid()) {
             $file = $request->file('report');
             $data = Excel::toArray([], $request->file('report'));
-            Redis::set('finance_' . $request->type .'_' .$file->getClientOriginalName(), json_encode($data));
+            Redis::set('finance_' . $request->type . '_' . $file->getClientOriginalName(), json_encode($data));
         } else {
             echo 'error';
             die;
@@ -179,8 +188,8 @@ class FinanceController extends Controller
     {
         $prifix = config('database.redis.options.prefix');
         $keys = Redis::keys('*finance_*');
-        foreach($keys as $v){
-            $key = str_replace($prifix,'',$v);
+        foreach ($keys as $v) {
+            $key = str_replace($prifix, '', $v);
             Redis::del($key);
         }
         return $this->apiOut();
