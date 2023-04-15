@@ -15,15 +15,15 @@
 <body style="overflow:hidden">
     <div id="wrapper">
                 <div class="ibox-title">
-                    <h5>账单配平查询</h5>
+                    <h2>账单配平查询</h2>
                     <div class="ibox-tools">
                         <form style="display: inline-block;margin-right:100px" action="/api/finance/excel/import" method="post" enctype="multipart/form-data">
                             <input style="display: inline-block" type="file" style="color:black" name='report' tooltip='导入Excel'></input>
                             <select name="type">
-                                <option value="left"
-                                >左侧</option>
-                                <option value="right"
-                                >右侧</option>
+                                <option value="daily"
+                                >日记账</option>
+                                <option value="bank"
+                                >银行对账单</option>
                             </select>
                             <button style="display: inline-block" class="btn btn-sm btn-primary" type="submit">
                                 导入
@@ -31,12 +31,20 @@
                         </form>
 
                     </div>
+                    <div style="margin-top:20px;border:1px solid"></div>
                     <div style='margin-top:20px'>
                         <button id='btnClear' onClick="clear()" class="glyphicon glyphicon-plus">清空</button>
-                        <a style="color:black" target="_black" href="/api/finance/analysis" class="glyphicon glyphicon-plus">分析</a>
+                        <a style="color:rgb(134, 2, 2);display:inline-block;margin-left:46px" target="_black" href="/api/finance/analysis" class="glyphicon glyphicon-plus">分析</a>
                     </div>
                 </div>
-                <div>
+                <div style="margin-top:20px;border:1px solid"></div>
+                <div style="margin-top:20px">
+                    说明：
+                    <div>1. 日记账 第一列是日期，第二列是凭证号 第三列是公司名称 第四列是借 第五列是贷</div>
+                    <div>2. 银行对账单第一列是日期 第二列是借 第三列是贷 第四列是公司名称</div>
+                </div>
+   
+                <div style="margin-top: 20px">
                     @foreach($keys as $value)
                     <div>{{ $value }}</div>
                     @endforeach

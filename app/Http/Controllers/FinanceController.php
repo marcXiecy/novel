@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class FinanceController extends Controller
 {
+    
     public function __construct()
     {
     }
@@ -41,104 +42,97 @@ class FinanceController extends Controller
     public function analysis()
     {
         
-        $left = Redis::get($this->redisKey('*finance_left*'));
-        if (empty($left)) {
-            return $this->apiOut([], 0, '缺少左侧excel');
+        $daily = Redis::get($this->redisKey('*finance_daily*'));
+        if (empty($daily)) {
+            return $this->apiOut([], 0, '缺少日记账excel');
         }
-        $left = json_decode($left);
-        $left = $left[0];
-        // dd($left);
-        $newLeft = [];
-        foreach ($left as $value) {
-            $temp = [];
-            $name = $value[3];
-            $temp['left'] = $value[1];
-            $temp['right'] = $value[2];
-            // if ($value[0]) {
-            //     $date = Carbon::createFromFormat('Ymd', $value[0]);
-            //     $temp['date'] = $date->format('Y-m-d');
-            //     // $temp['date'] = Carbon::parse($value[0])->format('Y-m-d');
-            // } else {
-            //     $temp['date'] = null;
-            // }
-            $temp['date'] = $value[0];
-
-            $newLeft[$name][] = $temp;
-        }
-        // dd($newLeft);
-
-        $right = Redis::get($this->redisKey('*finance_right*'));
-        if (empty($right)) {
-            return $this->apiOut([], 0, '缺少右侧excel');
-        }
-        $right = json_decode($right);
-        $right = $right[0];
-        $newRight = [];
+        $daily = json_decode($daily);
+        $daily = $daily[0];
+        // dd($daily);
+        $newDaily = [];
         $pattern = "/[\d_\-.]/";
-        foreach ($right as $v) {
+
+        foreach ($daily as $v) {
+            $temp = [];
             $name = $v[2];
             $name = str_replace('（未记账）', '', $name);
             $name = preg_replace($pattern, '', $name);
-            $temp = [];
             $temp['date'] = $v[0];
             $temp['id'] = $v[1];
-            $temp['left'] = $v[3];
-            $temp['right'] = $v[4];
-            $newRight[$name][] = $temp;
+            $temp['debit'] = $v[3];
+            $temp['credit'] = $v[4];
+            $newDaily[$name][] = $temp;
         }
-        //  dump($newRight);
+        // dd($newDaily);
+
+        $bank = Redis::get($this->redisKey('*finance_bank*'));
+        if (empty($bank)) {
+            return $this->apiOut([], 0, '缺少银行对账单excel');
+        }
+        $bank = json_decode($bank);
+        $bank = $bank[0];
+        $newBank = [];
+        foreach ($bank as $value) {
+            $temp = [];
+            $name = $value[3];
+            $temp['date'] = $value[0];
+            $temp['debit'] = $value[1];
+            $temp['credit'] = $value[2];
+            $newBank[$name][] = $temp;
+        }
+        //  dump($newBank);
         $result = [];
-        foreach ($newLeft as $keyLeft => $itemLeft) {
-            if (key_exists($keyLeft, $newRight)) {
-                $itemRight = $newRight[$keyLeft];
+        foreach ($newDaily as $keyDaily => $itemDaily) {
+            if (key_exists($keyDaily, $newBank)) {
+                $itemRight = $newBank[$keyDaily];
 
-                $tempLeft = $itemLeft;
+                $tempDaily = $itemDaily;
 
-                foreach ($itemLeft as $subkeyleft => $subLeft) {
-                    foreach ($itemRight as $subkeyright => $subRight) {
-                        if ($subLeft['left']) {
-                            if ($subRight['right'] == $subLeft['left']) {
-                                unset($tempLeft[$subkeyleft], $itemRight[$subkeyright]);
+                foreach ($itemDaily as $subKeyDaily => $subDaily) {
+                    foreach ($itemRight as $subKeyBank => $subBank) {
+                        if ($subDaily['debit']) {
+                            if ($subBank['credit'] == $subDaily['debit']) {
+                                unset($tempDaily[$subKeyDaily], $itemRight[$subKeyBank]);
                                 break;
                             }
                         } else {
-                            if ($subRight['left'] == $subLeft['right']) {
-                                unset($tempLeft[$subkeyleft], $itemRight[$subkeyright]);
+                            if ($subBank['debit'] == $subDaily['credit']) {
+                                unset($tempDaily[$subKeyDaily], $itemRight[$subKeyBank]);
                                 break;
                             }
                         }
                     }
                 }
-                if (!empty($tempLeft)) {
-                    $result['unset']['left'][$keyLeft] = $tempLeft;
+                if (!empty($tempDaily)) {
+                    $result['unset']['daily'][$keyDaily] = $tempDaily;
                 }
                 if (!empty($itemRight)) {
-                    $result['unset']['right'][$keyLeft] = $itemRight;
+                    $result['unset']['bank'][$keyDaily] = $itemRight;
                 }
-                unset($newRight[$keyLeft]);
+                unset($newBank[$keyDaily]);
             } else {
-                $result['unset']['left'][$keyLeft] = $itemLeft;
+                $result['unset']['daily'][$keyDaily] = $itemDaily;
             }
         }
-        $result['unset']['right'] = array_merge($result['unset']['right'], $newRight);
+        $result['unset']['bank'] = array_merge($result['unset']['bank'], $newBank);
         // return $this->apiOut($result);
         $filePath = Carbon::now() . '.xlsx';
         $cellData = [
             [
-                '日期', '公司名称', '借', '贷款', '凭证字号'
+                '日期', '公司名称', '借', '贷', '凭证字号'
             ],
         ];
-        foreach ($result['unset']['left'] as $key => $value) {
+        foreach ($result['unset']['daily'] as $key => $value) {
             foreach ($value as $val) {
-                if (empty($val['left']) && empty($val['right'])) {
+                if (empty($val['debit']) && empty($val['credit'])) {
                     continue;
                 }
                 $cell = [];
                 $cell[] = $val['date'];
                 $cell[] = $key;
-                $cell[] = $val['left'];
-                $cell[] = $val['right'];
-                $cell[] = '';
+                $cell[] = $val['debit'];
+                $cell[] = $val['credit'];
+                $cell[] = $val['id'];
                 $cellData[] = $cell;
             }
         }
@@ -152,17 +146,17 @@ class FinanceController extends Controller
         $cellData[] = $cell;
         $cellData[] = $cell;
         $cellData[] = $cell;
-        foreach ($result['unset']['right'] as $key => $value) {
+        foreach ($result['unset']['bank'] as $key => $value) {
             foreach ($value as $val) {
-                if (empty($val['left']) && empty($val['right'])) {
+                if (empty($val['debit']) && empty($val['credit'])) {
                     continue;
                 }
                 $cell = [];
                 $cell[] = $val['date'];
                 $cell[] = $key;
-                $cell[] = $val['left'];
-                $cell[] = $val['right'];
-                $cell[] = $val['id'];
+                $cell[] = $val['debit'];
+                $cell[] = $val['credit'];
+                $cell[] = '';
                 $cellData[] = $cell;
             }
         }
